@@ -108,7 +108,12 @@ class FsTest extends FilesystemTestCase {
 		Fs::setPermissions($workDir, 0444);
 		$this->assertEquals("0444", Fs::getPermissions($workDir));
 		$this->assertTrue(Fs::isReadable($workDir));
-		$this->assertFalse(Fs::isWritable($workDir));
+		// This test fails on github, but works fine on bitbucket o.O
+		if (empty($_SERVER["GITHUB_EVENT_PATH"]))
+			$this->assertFalse(Fs::isWritable($workDir));
+		
+		dbg(posix_getuid());
+		$this->fail("nope");
 	}
 	
 	public function testGetDirectoryIterator() {
