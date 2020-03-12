@@ -96,8 +96,7 @@ class FsTest extends FilesystemTestCase {
 		$this->assertTrue(Fs::isWritable($workDir));
 		$this->assertEquals("0777", Fs::getPermissions($workDir));
 		Fs::setPermissions($workDir, 0222);
-		// This test fails on github, but works fine on bitbucket o.O
-		if (empty($_SERVER["GITHUB_EVENT_PATH"]))
+		if (function_exists("posix_getuid") && posix_getuid() !== 0)
 			$this->assertFalse(Fs::isReadable($workDir));
 		$this->assertTrue(Fs::isWritable($workDir));
 		$this->assertEquals("0222", Fs::getPermissions($workDir));
@@ -108,12 +107,8 @@ class FsTest extends FilesystemTestCase {
 		Fs::setPermissions($workDir, 0444);
 		$this->assertEquals("0444", Fs::getPermissions($workDir));
 		$this->assertTrue(Fs::isReadable($workDir));
-		// This test fails on github, but works fine on bitbucket o.O
-		if (empty($_SERVER["GITHUB_EVENT_PATH"]))
+		if (function_exists("posix_getuid") && posix_getuid() !== 0)
 			$this->assertFalse(Fs::isWritable($workDir));
-		
-		dbg(posix_getuid());
-		$this->fail("nope");
 	}
 	
 	public function testGetDirectoryIterator() {
