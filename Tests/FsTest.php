@@ -96,7 +96,7 @@ class FsTest extends FilesystemTestCase {
 		$this->assertTrue(Fs::isWritable($workDir));
 		$this->assertEquals("0777", Fs::getPermissions($workDir));
 		Fs::setPermissions($workDir, 0222);
-		dbge(Fs::getPermissions($workDir));
+		dbg(Fs::isReadable($workDir), Fs::getPermissions($workDir));
 		$this->assertFalse(Fs::isReadable($workDir));
 		$this->assertTrue(Fs::isWritable($workDir));
 		$this->assertEquals("0222", Fs::getPermissions($workDir));
