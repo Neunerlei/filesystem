@@ -98,7 +98,7 @@ class Fs {
 				($m = $ref->getMethod("isReadable"))->setAccessible(TRUE);
 				return $m->invoke(static::getFs(), $filename);
 			}
-			return @is_readable($filename);
+			return is_readable($filename);
 		};
 		foreach (static::toIterable($files) as $file)
 			if (!$checker($file)) return FALSE;
