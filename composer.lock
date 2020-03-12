@@ -1868,5 +1868,6 @@
     "platform": {
         "php": "^7.3"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "version": "5.1.0"
 }
