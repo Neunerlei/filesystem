@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/Neunerlei/filesystem/compare/v5.1.2...v5.2.0) (2020-03-16)
+
+
+### Features
+
+* replace the licence with apache-2.0 ([ad08d90](https://github.com/Neunerlei/filesystem/commit/ad08d90a218f736d646291e8acbbf1eb71e78701))
+
 ### [5.1.2](https://github.com/Neunerlei/filesystem/compare/v5.1.1...v5.1.2) (2020-03-12)
 
 ### [5.1.1](https://github.com/Neunerlei/filesystem/compare/v5.1.0...v5.1.1) (2020-03-12)
