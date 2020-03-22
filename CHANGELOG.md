@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.1](https://github.com/Neunerlei/filesystem/compare/v5.2.0...v5.2.1) (2020-03-22)
+
+
+### Bug Fixes
+
+* make sure that SplFileInformation objects are correctly converted into a string before using them ([ec61dd6](https://github.com/Neunerlei/filesystem/commit/ec61dd68c85ee532ce48430d77dcc981cc495188))
+
 ## [5.2.0](https://github.com/Neunerlei/filesystem/compare/v5.1.2...v5.2.0) (2020-03-16)
 
 

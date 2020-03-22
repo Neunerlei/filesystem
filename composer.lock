@@ -1869,5 +1869,5 @@
         "php": "^7.3"
     },
     "platform-dev": [],
-    "version": "5.2.0"
+    "version": "5.2.1"
 }
