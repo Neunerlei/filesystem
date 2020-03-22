@@ -101,7 +101,7 @@ class Fs {
 			return is_readable($filename);
 		};
 		foreach (static::toIterable($files) as $file)
-			if (!$checker($file)) return FALSE;
+			if (!$checker((string)$file)) return FALSE;
 		return TRUE;
 	}
 	
@@ -114,7 +114,8 @@ class Fs {
 	 */
 	public static function isWritable($files): bool {
 		foreach (static::toIterable($files) as $file)
-			if (file_exists($file) && !is_writable($file) || (!file_exists($file) && !is_writable(dirname($file)))) return FALSE;
+			if (file_exists((string)$file) && !is_writable((string)$file) ||
+				(!file_exists((string)$file) && !is_writable(dirname((string)$file)))) return FALSE;
 		return TRUE;
 	}
 	
@@ -153,8 +154,8 @@ class Fs {
 	 */
 	public static function flushDirectory($files): void {
 		foreach (static::toIterable($files) as $directory)
-			if (is_dir($directory))
-				static::getFs()->remove(static::getDirectoryIterator($directory, TRUE));
+			if (is_dir((string)$directory))
+				static::getFs()->remove(static::getDirectoryIterator((string)$directory, TRUE));
 		clearstatcache();
 	}
 	
@@ -226,10 +227,10 @@ class Fs {
 	public static function setPermissions($files, int $mode, bool $recursive = TRUE): void {
 		// I reimplement the logic, because the symfony component crashes if you make a directory un-readable
 		foreach (static::toIterable($files) as $file) {
-			if ($recursive && is_dir($file) && !is_link($file))
-				static::setPermissions(new \FilesystemIterator($file), $mode, TRUE);
-			if (TRUE !== @chmod($file, $mode & ~0000))
-				throw new IOException(sprintf('Failed to chmod file "%s".', $file), 0, NULL, $file);
+			if ($recursive && is_dir((string)$file) && !is_link((string)$file))
+				static::setPermissions(new \FilesystemIterator((string)$file), $mode, TRUE);
+			if (TRUE !== @chmod((string)$file, $mode & ~0000))
+				throw new IOException(sprintf('Failed to chmod file "%s".', (string)$file), 0, NULL, (string)$file);
 		}
 		clearstatcache();
 	}
