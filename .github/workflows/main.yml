@@ -10,18 +10,39 @@ on:
       - 'CHANGELOG.md'
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        uses: actions/checkout@v1
-      -
-        uses: pxgamer/composer-action@master
-        with:
-          command: install
-      -
-        uses: pxgamer/composer-action@master
-        with:
-          command: test
+    test:
+      runs-on: ubuntu-latest
+      
+      strategy:
+        max-parallel: 2
+        matrix:
+          php-versions: [ 7.3, 7.4, 8.0 ]
+      
+      name: Test on PHP ${{ matrix.php-versions }}
+      steps:
+        -
+          uses: actions/checkout@v2
+        
+        -
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: ${{ matrix.php-versions }}
+            extensions: intl, mbstring
+        
+        -
+          name: Cache composer dependencies
+          uses: actions/cache@v1
+          with:
+            path: ~/.composer/cache
+            key: php-${{ matrix.php-versions }}-composer-${{ hashFiles('composer.lock') }}
+        
+        -
+          name: Install composer dependencies
+          run: composer install
+        
+        -
+          name: Run PHPunit
+          run: composer run test-cover-clover
   
   release:
     runs-on: ubuntu-latest
