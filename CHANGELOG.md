@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.3.0](https://github.com/Neunerlei/filesystem/compare/v5.2.1...v5.3.0) (2022-09-08)
+
+
+### Features
+
+* implement Path utility ([0e7b1a7](https://github.com/Neunerlei/filesystem/commit/0e7b1a7cec84d168904a212b997f0b63cc1f281c))
+
 ### [5.2.1](https://github.com/Neunerlei/filesystem/compare/v5.2.0...v5.2.1) (2020-03-22)
 
 
