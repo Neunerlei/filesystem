@@ -76,6 +76,24 @@ use Neunerlei\FileSystem\Fs;
 Fs::isWritable("/check/writeability.txt"); // TRUE|FALSE
 ```
 
+#### isFile()
+
+Tells whether a file or list of paths exists and contains only files
+
+```php
+use Neunerlei\FileSystem\Fs;
+Fs::isFile("/check/if/fileExists.txt"); // TRUE|FALSE
+```
+
+#### isDir()
+
+Tells whether a file or list of paths exists and contains only directories
+
+```php
+use Neunerlei\FileSystem\Fs;
+Fs::isDir("/check/if/directoryExists.txt"); // TRUE|FALSE
+```
+
 #### touch()
 
 Sets access and modification time of file.

@@ -30,12 +30,12 @@ use Symfony\Component\Filesystem\Tests\FilesystemTestCase;
 
 class FsTest extends FilesystemTestCase {
 	
-	public function testGetFs() {
+	public function testGetFs(): void {
 		$this->assertInstanceOf(Filesystem::class, Fs::getFs());
 		$this->assertSame(Fs::getFs(), Fs::getFs());
 	}
 	
-	public function testCopyForFilesAndFolders() {
+	public function testCopyForFilesAndFolders(): void {
 		
 		// Copy a file
 		$sourceFile = $this->workspace . "/foo.txt";
@@ -54,7 +54,7 @@ class FsTest extends FilesystemTestCase {
 		$this->assertTrue(Fs::exists($sourceDir));
 		$sourceFiles = [];
 		for ($i = 0; $i < 10; $i++) {
-			$sourceFile = $sourceDir . "/" . md5(microtime(TRUE) . rand()) . ".txt";;
+			$sourceFile = $sourceDir . "/" . md5(microtime(TRUE) . rand()) . ".txt";
 			$sourceFiles[] = $sourceFile;
 			Fs::touch($sourceFile);
 			$this->assertTrue(Fs::exists($sourceFile));
@@ -68,7 +68,7 @@ class FsTest extends FilesystemTestCase {
 		
 	}
 	
-	public function _testCopyFailOnMissingFileDataProvider() {
+	public function _testCopyFailOnMissingFileDataProvider(): array {
 		return [
 			[$this->workspace . "/doesNotExist.txt"],
 			[$this->workspace . "/does/Not/Exist"],
@@ -80,12 +80,12 @@ class FsTest extends FilesystemTestCase {
 	 *
 	 * @dataProvider _testCopyFailOnMissingFileDataProvider
 	 */
-	public function testCopyFailOnMissingFile($source) {
+	public function testCopyFailOnMissingFile($source): void {
 		$this->expectException(FileNotFoundException::class);
 		Fs::copy($source, $this->workspace . "/foo");
 	}
 	
-	public function testPermissionsSettingAndLookup() {
+	public function testPermissionsSettingAndLookup(): void {
 		// Write - only
 		$this->assertTrue(Fs::isReadable($this->workspace));
 		$workDir = $this->workspace . "/foo";
@@ -111,7 +111,7 @@ class FsTest extends FilesystemTestCase {
 			$this->assertFalse(Fs::isWritable($workDir));
 	}
 	
-	public function testGetDirectoryIterator() {
+	public function testGetDirectoryIterator(): void {
 		Fs::touch($this->workspace . "/a.txt");
 		Fs::touch($this->workspace . "/b.txt");
 		Fs::touch($this->workspace . "/c.txt");
@@ -172,7 +172,7 @@ class FsTest extends FilesystemTestCase {
 		}
 	}
 	
-	public function testReadAndWriteFile() {
+	public function testReadAndWriteFile(): void {
 		$filename = $this->workspace . "/foo.txt";
 		Fs::writeFile($filename, "foo bar");
 		$this->assertTrue(Fs::exists($filename));
@@ -184,7 +184,7 @@ class FsTest extends FilesystemTestCase {
 		$this->assertEquals(["foo bar" . PHP_EOL, "bar bazbar baz"], Fs::readFileAsLines($filename));
 	}
 	
-	public function testFlushDirectory() {
+	public function testFlushDirectory(): void {
 		Fs::touch($this->workspace . "/a.txt");
 		Fs::touch($this->workspace . "/b.txt");
 		Fs::touch($this->workspace . "/c.txt");
@@ -198,4 +198,40 @@ class FsTest extends FilesystemTestCase {
 		$this->assertFalse(Fs::exists($this->workspace . "/subDir"));
 		$this->assertEquals(0, count(iterator_to_array(Fs::getDirectoryIterator($this->workspace))));
 	}
+
+    public function testIsFile(): void {
+        Fs::touch($this->workspace . '/a.txt');
+        Fs::touch($this->workspace . '/b.txt');
+        Fs::mkdir($this->workspace . '/c');
+
+        static::assertTrue(Fs::isFile($this->workspace . '/a.txt'));
+        static::assertTrue(Fs::isFile([
+            $this->workspace . '/a.txt',
+            $this->workspace . '/b.txt'
+        ]));
+        static::assertFalse(Fs::isFile($this->workspace . '/c'));
+        static::assertFalse(Fs::isFile([
+            $this->workspace . '/a.txt',
+            $this->workspace . '/b.txt',
+            $this->workspace . '/c'
+        ]));
+    }
+
+    public function testIsDir(): void {
+        Fs::touch($this->workspace . '/a.txt');
+        Fs::touch($this->workspace . '/b.txt');
+        Fs::mkdir($this->workspace . '/c');
+
+        static::assertFalse(Fs::isDir($this->workspace . '/a.txt'));
+        static::assertFalse(Fs::isDir([
+            $this->workspace . '/a.txt',
+            $this->workspace . '/b.txt'
+        ]));
+        static::assertTrue(Fs::isDir($this->workspace . '/c'));
+        static::assertFalse(Fs::isDir([
+            $this->workspace . '/a.txt',
+            $this->workspace . '/b.txt',
+            $this->workspace . '/c'
+        ]));
+    }
 }

@@ -91,6 +91,52 @@ class Fs
     {
         return static::getFs()->exists($files);
     }
+
+    /**
+     * Checks if the list of elements contains only existing files
+     *
+     * @param   string|iterable  $files  A filename, an array of files, or a \Traversable instance to check
+     *
+     * @return bool true if the file(s) exist, false otherwise
+     */
+    public static function isFile($files): bool{
+        $maxPathLength = \PHP_MAXPATHLEN - 2;
+
+        foreach (static::toIterable($files) as $file) {
+            if (\strlen($file) > $maxPathLength) {
+                throw new IOException(sprintf('Could not check if path is a file, because path length exceeds %d characters.', $maxPathLength), 0, null, $file);
+            }
+
+            if (!is_file($file)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the list of elements contains only existing directories
+     *
+     * @param   string|iterable  $directories  A filename, an array of directories, or a \Traversable instance to check
+     *
+     * @return bool true if the directory(s) exist, false otherwise
+     */
+    public static function isDir($directories): bool{
+        $maxPathLength = \PHP_MAXPATHLEN - 2;
+
+        foreach (static::toIterable($directories) as $file) {
+            if (\strlen($file) > $maxPathLength) {
+                throw new IOException(sprintf('Could not check if path is a directory, because path length exceeds %d characters.', $maxPathLength), 0, null, $file);
+            }
+
+            if (!is_dir($file)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
     /**
      * Tells whether a file or list of files exists and is readable.
