@@ -36,7 +36,7 @@ jobs:
           key: php-${{ matrix.php-versions }}-composer-${{ hashFiles('composer.lock') }}
 
       - name: Remove lockfile, for php8 backward compatibility
-        if: matrix.php-versions == '7.3' or matrix.php-versions == '7.4' or matrix.php-versions == '8.0'
+        if: matrix.php-versions == '7.3' || matrix.php-versions == '7.4' || matrix.php-versions == '8.0'
         run: rm -rf composer.lock
 
       -
