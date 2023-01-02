@@ -15,7 +15,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        php-versions: [ 7.3, 7.4, 8.0 ]
+        php-versions: [ 7.3, 7.4, 8.0, 8.1, 8.2 ]
     
     name: Test on PHP ${{ matrix.php-versions }}
     steps:
@@ -34,7 +34,11 @@ jobs:
         with:
           path: ~/.composer/cache
           key: php-${{ matrix.php-versions }}-composer-${{ hashFiles('composer.lock') }}
-      
+
+      - name: Remove lockfile, for php8 backward compatibility
+        if: matrix.php-versions == '7.3' or matrix.php-versions == '7.4' or matrix.php-versions == '8.0'
+        run: rm -rf composer.lock
+
       -
         name: Install composer dependencies
         run: composer install

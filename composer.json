@@ -26,7 +26,7 @@
 		"neunerlei/dbg": "^1.8"
 	},
 	"require": {
-		"symfony/filesystem": "^5.4"
+		"symfony/filesystem": "^5.4|^v6.2.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -42,5 +42,8 @@
 		"allow-plugins": {
 			"0.0.0/composer-include-files": true
 		}
+	},
+	"archive": {
+		"exclude": [".ddev"]
 	}
 }
