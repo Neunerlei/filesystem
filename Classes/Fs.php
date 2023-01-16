@@ -272,7 +272,20 @@ class Fs
         
         return $it;
     }
-    
+
+    /**
+     * Renames a file or a directory.
+     *
+     * @throws IOException When target file or directory already exists
+     * @throws IOException When origin cannot be renamed
+     */
+    public function rename(string $origin, string $target, bool $overwrite = false): void
+    {
+        static::getFs()->rename($origin, $target, $overwrite);
+        clearstatcache();
+    }
+
+
     /**
      * Returns the unix file permissions for a given file like 0777 as a string.
      *
@@ -385,7 +398,7 @@ class Fs
         
         return $group;
     }
-    
+
     /**
      * Can be used to update the group of a given file or folder
      *

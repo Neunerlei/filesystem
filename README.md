@@ -144,6 +144,15 @@ Fs::getDirectoryIterator("/path/to/iterate", true, ["regex" => "/\.txt$/"]);
 Fs::getDirectoryIterator("/path/to/iterate", true, ["dirFirst"]);
 ```
 
+#### rename()
+
+Allows you to rename a file or directory
+
+```php
+use Neunerlei\FileSystem\Fs;
+Fs::rename("/path/a", "/path/b");
+```
+
 #### getPermissions()
 
 Returns the unix file permissions for a given file like "0777" as a string.
