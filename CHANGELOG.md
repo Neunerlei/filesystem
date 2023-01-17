@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/Neunerlei/filesystem/compare/v5.3.0...v5.4.0) (2023-01-03)
+
+
+### Features
+
+* add isFile and isDir helpers ([e3a1d83](https://github.com/Neunerlei/filesystem/commit/e3a1d8309df23ed3ac906888a2d4c6bad0fd172d))
+* add support for newer symfony fs version ([23e08c1](https://github.com/Neunerlei/filesystem/commit/23e08c1b29ae256199e22653ca7dc8ff8f7d05bd))
+
 ## [5.3.0](https://github.com/Neunerlei/filesystem/compare/v5.2.1...v5.3.0) (2022-09-08)
 
 
