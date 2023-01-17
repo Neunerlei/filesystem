@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.0](https://github.com/Neunerlei/filesystem/compare/v5.4.0...v5.5.0) (2023-01-17)
+
+
+### Features
+
+* add missing "rename" method ([511ebb1](https://github.com/Neunerlei/filesystem/commit/511ebb17bead16075c4eab9d782c71f1a77649d6))
+
 ## [5.4.0](https://github.com/Neunerlei/filesystem/compare/v5.3.0...v5.4.0) (2023-01-03)
 
 
