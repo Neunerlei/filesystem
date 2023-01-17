@@ -279,7 +279,7 @@ class Fs
      * @throws IOException When target file or directory already exists
      * @throws IOException When origin cannot be renamed
      */
-    public function rename(string $origin, string $target, bool $overwrite = false): void
+    public static function rename(string $origin, string $target, bool $overwrite = false): void
     {
         static::getFs()->rename($origin, $target, $overwrite);
         clearstatcache();
