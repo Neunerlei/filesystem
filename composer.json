@@ -37,7 +37,7 @@
 		"test-cover-clover": "XDEBUG_MODE=coverage phpunit Tests --coverage-clover Tests/Coverage.xml",
 		"test": "vendor/bin/phpunit Tests"
 	},
-	"version": "5.5.0",
+	"version": "5.5.1",
 	"config": {
 		"allow-plugins": {
 			"0.0.0/composer-include-files": true
