@@ -1,21 +1,4 @@
 <?php
-/**
- * Copyright 2020 Martin Neundorfer (Neunerlei)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Last modified: 2020.03.11 at 22:01
- */
 declare(strict_types=1);
 
 namespace Neunerlei\FileSystem;
@@ -25,6 +8,7 @@ use EmptyIterator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionException;
 use ReflectionObject;
 use RegexIterator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -34,21 +18,20 @@ use Traversable;
 
 class Fs
 {
-    
     /**
      * The class that is used as file system implementation.
      * Can be used for custom extensions
      *
      * @var string
      */
-    public static $fsClass = Filesystem::class;
+    public static string $fsClass = Filesystem::class;
     
     /**
      * The instance of the file system
      *
-     * @var \Symfony\Component\Filesystem\Filesystem
+     * @var Filesystem
      */
-    protected static $fs;
+    protected static Filesystem $fs;
     
     /**
      * Copies a file or a directory.
@@ -75,7 +58,7 @@ class Fs
      *
      * @throws IOException On any directory creation failure
      */
-    public static function mkdir($dirs, int $mode = 0777): void
+    public static function mkdir(string|iterable $dirs, int $mode = 0777): void
     {
         static::getFs()->mkdir($dirs, $mode);
     }
@@ -87,7 +70,7 @@ class Fs
      *
      * @return bool true if the file(s) exist, false otherwise
      */
-    public static function exists($files): bool
+    public static function exists(string|iterable $files): bool
     {
         return static::getFs()->exists($files);
     }
@@ -99,7 +82,7 @@ class Fs
      *
      * @return bool true if the file(s) exist, false otherwise
      */
-    public static function isFile($files): bool{
+    public static function isFile(string|iterable $files): bool{
         $maxPathLength = \PHP_MAXPATHLEN - 2;
 
         foreach (static::toIterable($files) as $file) {
@@ -122,7 +105,7 @@ class Fs
      *
      * @return bool true if the directory(s) exist, false otherwise
      */
-    public static function isDir($directories): bool{
+    public static function isDir(string|iterable $directories): bool{
         $maxPathLength = \PHP_MAXPATHLEN - 2;
 
         foreach (static::toIterable($directories) as $file) {
@@ -137,16 +120,16 @@ class Fs
 
         return true;
     }
-    
+
     /**
      * Tells whether a file or list of files exists and is readable.
      *
-     * @param   string|string[]  $files  The files to check for permissions
+     * @param string|iterable $files The files to check for permissions
      *
      * @return bool
-     * @throws IOException When windows path is longer than 258 characters
+     * @throws ReflectionException
      */
-    public static function isReadable($files): bool
+    public static function isReadable(string|iterable $files): bool
     {
         $checker = static function (string $filename): bool {
             // I'm working with symfony for years now, and I still don't get why this method is private o.O
@@ -158,24 +141,24 @@ class Fs
             
             return is_readable($filename);
         };
-        
+
         foreach (static::toIterable($files) as $file) {
             if (! $checker((string)$file)) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Tells whether a file or list of files is writable
      *
-     * @param   string|string[]  $files  The files to check for permissions
+     * @param string|iterable $files The files to check for permissions
      *
      * @return bool
      */
-    public static function isWritable($files): bool
+    public static function isWritable(string|iterable $files): bool
     {
         foreach (static::toIterable($files) as $file) {
             if ((file_exists((string)$file) && ! is_writable((string)$file)) ||
@@ -196,12 +179,16 @@ class Fs
      *
      * @throws IOException When touch fails
      */
-    public static function touch($files, $time = null, $atime = null): void
+    public static function touch(
+        string|iterable $files,
+        int|null|\DateTimeInterface $time = null,
+        int|null|\DateTimeInterface $atime = null
+    ): void
     {
-        if (! empty($time) && $time instanceof DateTime) {
+        if (! empty($time) && $time instanceof \DateTimeInterface) {
             $time = $time->getTimestamp();
         }
-        if (! empty($atime) && $atime instanceof DateTime) {
+        if (! empty($atime) && $atime instanceof \DateTimeInterface) {
             $atime = $atime->getTimestamp();
         }
         static::getFs()->touch($files, $time, $atime);
@@ -214,7 +201,7 @@ class Fs
      *
      * @throws IOException When removal fails
      */
-    public static function remove($files): void
+    public static function remove(string|iterable $files): void
     {
         static::getFs()->remove($files);
     }
@@ -226,7 +213,7 @@ class Fs
      *
      * @throws IOException When removal fails
      */
-    public static function flushDirectory($files): void
+    public static function flushDirectory(string|iterable $files): void
     {
         foreach (static::toIterable($files) as $directory) {
             if (is_dir((string)$directory)) {
@@ -322,7 +309,7 @@ class Fs
      *
      * @throws IOException When the permission update fails
      */
-    public static function setPermissions($files, int $mode, bool $recursive = true): void
+    public static function setPermissions(string|iterable $files, int $mode, bool $recursive = true): void
     {
         // I reimplement the logic, because the symfony component crashes if you make a directory un-readable
         foreach (static::toIterable($files) as $file) {
@@ -402,13 +389,12 @@ class Fs
     /**
      * Can be used to update the group of a given file or folder
      *
-     * @param   string|string[]  $files      The file, or list of files to set the group for
-     * @param   string|int       $group      The unix group to set for the file
-     * @param   bool             $recursive  default TRUE: FALSE if directories should NOT be traversed recursively
+     * @param string|iterable $files The file, or list of files to set the group for
+     * @param string|int $group The unix group to set for the file
+     * @param bool $recursive default TRUE: FALSE if directories should NOT be traversed recursively
      *
-     * @throws IOException When the group update fails
      */
-    public static function setGroup($files, $group, bool $recursive = true): void
+    public static function setGroup(string|iterable $files, $group, bool $recursive = true): void
     {
         static::getFs()->chgrp($files, $group, $recursive);
         clearstatcache();
@@ -479,11 +465,11 @@ class Fs
      * Writes the given content into a file on your file system.
      *
      * @param   string  $filename  The path to the file to write
-     * @param   string  $content   The data to write into the file
+     * @param   string|resource  $content   The data to write into the file
      *
      * @throws IOException
      */
-    public static function writeFile(string $filename, $content): void
+    public static function writeFile(string $filename, mixed $content): void
     {
         static::getFs()->dumpFile($filename, $content);
     }
@@ -497,7 +483,7 @@ class Fs
      *
      * @throws IOException If the file is not writable
      */
-    public static function appendToFile(string $filename, $content, bool $asNewLine = true): void
+    public static function appendToFile(string $filename, mixed $content, bool $asNewLine = true): void
     {
         static::getFs()->appendToFile($filename, $asNewLine && static::exists($filename) ? PHP_EOL . $content : $content);
     }
@@ -505,22 +491,22 @@ class Fs
     /**
      * Returns the instance of the file system class
      *
-     * @return \Symfony\Component\Filesystem\Filesystem
+     * @return Filesystem
      */
     public static function getFs(): Filesystem
     {
         return static::$fs ?? (static::$fs = new static::$fsClass());
     }
-    
+
     /**
      * Converts the given file/files to an iterable object
      *
-     * @param $files
+     * @param string|iterable $files
      *
      * @return iterable
      */
-    protected static function toIterable($files): iterable
+    protected static function toIterable(string|iterable $files): iterable
     {
-        return is_array($files) || $files instanceof Traversable ? $files : [$files];
+        return is_iterable($files) ? $files : [$files];
     }
 }

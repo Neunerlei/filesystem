@@ -6,8 +6,11 @@ namespace Neunerlei\FileSystem\Tests;
 
 
 use Neunerlei\FileSystem\Path;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Path::class)]
 class PathTest extends TestCase
 {
     public function testUnifySlashes(): void
@@ -47,7 +50,7 @@ class PathTest extends TestCase
     }
     
     
-    public function provideGetFilenameTests(): array
+    public static function provideGetFilenameTests(): array
     {
         return [
             ['/webmozart/puli/style.css', 'style.css'],
@@ -59,10 +62,8 @@ class PathTest extends TestCase
             ['', ''],
         ];
     }
-    
-    /**
-     * @dataProvider provideGetFilenameTests
-     */
+
+    #[DataProvider('provideGetFilenameTests')]
     public function testGetFilename($path, $filename): void
     {
         $this->assertSame($filename, Path::getFilename($path));

@@ -22,11 +22,12 @@
 		"source": "https://github.com/neunerlei/filesystem"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^9.0",
+		"php": "^8.3",
+		"phpunit/phpunit": "^11",
 		"neunerlei/dbg": "^1.8"
 	},
 	"require": {
-		"symfony/filesystem": "^5.4|^v6.2.0"
+		"symfony/filesystem": "^7.2.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -34,18 +35,15 @@
 		}
 	},
 	"scripts": {
-		"test-cover-clover": "XDEBUG_MODE=coverage phpunit Tests --coverage-clover Tests/Coverage.xml",
-		"test": "vendor/bin/phpunit Tests"
+		"test:unit": "phpunit --testsuite unit --exclude-group integration",
+		"test:unit:coverage": "XDEBUG_MODE=coverage phpunit --testsuite unit --exclude-group integration --coverage-html ./.phpunit.coverage; cp ./Tests/coverage.dark.css .phpunit.coverage/_css/custom.css",
+		"test:unit:coverage:text": "XDEBUG_MODE=coverage phpunit --testsuite unit --exclude-group integration --coverage-text",
+		"test:unit:coverage:clover": "XDEBUG_MODE=coverage phpunit --testsuite unit --coverage-clover .phpunit.coverage/coverage-clover.xml"
 	},
 	"version": "5.5.1",
 	"config": {
 		"allow-plugins": {
 			"0.0.0/composer-include-files": true
 		}
-	},
-	"archive": {
-		"exclude": [
-			".ddev"
-		]
 	}
 }

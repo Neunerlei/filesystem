@@ -1,13 +1,29 @@
-.settings/
-.DS_Store
-.env
-vendor
-docs/node_modules
-.phpunit.result.cache
-
 # IDEA Code Style
 .idea/*
 !.idea/copyright/
 !.idea/copyright/*
 !.idea/codeStyles/
 !.idea/codeStyles/*
+
+# Env files
+.env
+
+# Credentials
+/auth.json
+
+# Log files
+*.log
+
+# Dependencies
+/node_modules
+/vendor
+
+# Editor files
+/.fleet
+/.nova
+/.vscode
+/.zed
+
+# PHPUnit
+.phpunit.coverage
+.phpunit.cache

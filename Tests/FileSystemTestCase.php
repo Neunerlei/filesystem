@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\Filesystem\Tests;
+namespace Neunerlei\FileSystem\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FilesystemTestCase extends TestCase {
+abstract class FileSystemTestCase extends TestCase {
 	private $umask;
 	
 	protected $longPathNamesWindows = [];
@@ -26,7 +26,7 @@ class FilesystemTestCase extends TestCase {
 	/**
 	 * @var string
 	 */
-	protected $workspace = NULL;
+	protected static $workspace = NULL;
 	
 	/**
 	 * @var bool|null Flag for hard links on Windows
@@ -69,9 +69,9 @@ class FilesystemTestCase extends TestCase {
 	protected function setUp(): void {
 		$this->umask = umask(0);
 		$this->filesystem = new Filesystem();
-		$this->workspace = sys_get_temp_dir() . '/' . microtime(TRUE) . '.' . mt_rand();
-		mkdir($this->workspace, 0777, TRUE);
-		$this->workspace = realpath($this->workspace);
+		static::$workspace = sys_get_temp_dir() . '/' . microtime(TRUE) . '.' . mt_rand();
+		mkdir(static::$workspace, 0777, TRUE);
+		static::$workspace = realpath(static::$workspace);
 	}
 	
 	protected function tearDown(): void {
@@ -83,7 +83,7 @@ class FilesystemTestCase extends TestCase {
 		}
 		
 		try {
-			$this->filesystem->remove($this->workspace);
+			$this->filesystem->remove(static::$workspace);
 		} catch (\UnexpectedValueException $e) {
 		}
 		umask($this->umask);
