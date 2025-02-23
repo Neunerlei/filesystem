@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/Neunerlei/filesystem/compare/v5.5.1...v6.0.0) (2025-02-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* now requires at least PHP 8.3
+
+### Features
+
+* upgrade to newer PHP versions ([f128721](https://github.com/Neunerlei/filesystem/commit/f128721a040bf78a3ec501188cb6394613c03ab6))
+
 ### [5.5.1](https://github.com/Neunerlei/filesystem/compare/v5.5.0...v5.5.1) (2023-01-17)
 
 
