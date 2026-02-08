@@ -134,7 +134,14 @@ class Fs
         $checker = static function (string $filename): bool {
             // I'm working with symfony for years now, and I still don't get why this method is private o.O
             if (($ref = new ReflectionObject(static::getFs()))->hasMethod('isReadable')) {
-                ($m = $ref->getMethod('isReadable'))->setAccessible(true);
+                $m = $ref->getMethod('isReadable');
+                
+                // If php version is greater than 8.1, we do no longer need to set the method accessible,
+                // because of the new internal accessibility handling.
+                // But for older versions we need to do this to be able to call the method.
+                if(PHP_VERSION_ID < 80100) {
+                    $m->setAccessible(true);
+                }
                 
                 return $m->invoke(static::getFs(), $filename);
             }

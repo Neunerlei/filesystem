@@ -8,6 +8,8 @@
 		 requireCoverageMetadata="true"
 		 beStrictAboutCoverageMetadata="false"
 		 beStrictAboutOutputDuringTests="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         failOnDeprecation="true"
 		 displayDetailsOnPhpunitDeprecations="true"
 		 failOnPhpunitDeprecation="true"
 		 failOnRisky="true"
