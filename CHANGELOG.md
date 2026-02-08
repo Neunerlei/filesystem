@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.2](https://github.com/Neunerlei/filesystem/compare/v6.0.1...v6.0.2) (2025-02-23)
+
+
+### Bug Fixes
+
+* remove deprecated usage of using null on a typed parameter ([a286451](https://github.com/Neunerlei/filesystem/commit/a286451b9a64e0a5ef5e3d53c548c871763c61f4))
+
 ### [6.0.1](https://github.com/Neunerlei/filesystem/compare/v6.0.0...v6.0.1) (2025-02-23)
 
 ## [6.0.0](https://github.com/Neunerlei/filesystem/compare/v5.5.1...v6.0.0) (2025-02-23)
